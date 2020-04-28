@@ -172,6 +172,8 @@ class BaseDetector(nn.Module, metaclass=ABCMeta):
 
         for img, img_meta in zip(imgs, img_metas):
             h, w, _ = img_meta['img_shape']
+            if img_meta['isGray']:
+                img = mmcv.gray2rgb(img) 
             img_show = img[:h, :w, :]
 
             bboxes = np.vstack(bbox_result)

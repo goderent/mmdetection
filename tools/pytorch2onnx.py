@@ -81,10 +81,17 @@ def main():
     if not args.out.endswith('.onnx'):
         raise ValueError('The output file must be a onnx file.')
 
+    # if len(args.shape) == 1:
+    #     input_shape = (3, args.shape[0], args.shape[0])
+    # elif len(args.shape) == 2:
+    #     input_shape = (3, ) + tuple(args.shape)
+    # else:
+    #     raise ValueError('invalid input shape')
+
     if len(args.shape) == 1:
-        input_shape = (3, args.shape[0], args.shape[0])
+        input_shape = (1, args.shape[0], args.shape[0])
     elif len(args.shape) == 2:
-        input_shape = (3, ) + tuple(args.shape)
+        input_shape = (1, ) + tuple(args.shape)
     else:
         raise ValueError('invalid input shape')
 
