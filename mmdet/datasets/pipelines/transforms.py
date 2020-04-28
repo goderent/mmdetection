@@ -457,6 +457,38 @@ class SegRescale(object):
 
 
 @PIPELINES.register_module
+class Photo2Gray(object):
+    """convert the bgr image to the gray image
+
+    Args:
+        color_type (str): image color type, "rgb" or "bgr"
+    """
+    def __init__(self,
+                 color_type="bgr"):
+        self.color_type = color_type
+
+    def __call__(self, results):
+        img = results['img']
+
+        # convert color from BGR to Gray
+        if self.color_type == "bgr":
+            img = mmcv.bgr2gray(img)
+        elif self.color_type == "rgb":
+            img = mmcv.rgb2gray(img)
+        else:
+            raise Exception("unsuppote Color Type")
+
+        results['img'] = img
+        results['isGray'] = True
+        return results
+
+    def __repr__(self):
+        repr_str = self.__class__.__name__
+        repr_str += ('({} to gray)').format(
+                         self.color_type)
+        return repr_str
+
+@PIPELINES.register_module
 class PhotoMetricDistortion(object):
     """Apply photometric distortion to image sequentially, every transformation
     is applied with a probability of 0.5. The position of random contrast is in
@@ -654,7 +686,10 @@ class MinIoURandomCrop(object):
         img, boxes, labels = [
             results[k] for k in ('img', 'gt_bboxes', 'gt_labels')
         ]
-        h, w, c = img.shape
+        h = img.shape[0]
+        w = img.shape[1]
+		if len(img.shape)>2:
+			c = img.shape[2]
         while True:
             mode = random.choice(self.sample_mode)
             if mode == 1:
