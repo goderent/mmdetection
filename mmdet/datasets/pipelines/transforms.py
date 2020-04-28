@@ -688,8 +688,8 @@ class MinIoURandomCrop(object):
         ]
         h = img.shape[0]
         w = img.shape[1]
-		if len(img.shape)>2:
-			c = img.shape[2]
+        if len(img.shape)>2:
+            c = img.shape[2]
         while True:
             mode = random.choice(self.sample_mode)
             if mode == 1:
